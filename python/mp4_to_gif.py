@@ -1,6 +1,8 @@
 #!/home/alau/anaconda3/envs/sdc-lanes/bin/python
 #
-# Usage: ./video-capture.py <filename> <start(sec)> <end(sec)>
+# Utility to use a clip of an input .mp4 video file to create a .gif image file.
+#
+# Usage: ./mp4_to_gif.py <input video filename> <start(sec)> <end(sec)> [<outfilename>]
 #
 
 from sys import argv
@@ -10,6 +12,7 @@ from moviepy.editor import VideoFileClip
 filename = argv[1]
 begin = int(argv[2])
 end = int(argv[3])
+outfilename = argv[4]
 ########################################
 
 
@@ -40,5 +43,14 @@ if ext != 'mp4':
   raise SystemExit
 
 vclip = VideoFileClip(f"./{filename}").subclip(begin, end)
-#vclip.write_gif(f"./{name}.gif", fps=3, program='imageio' loop=1, fuzz=0)
-vclip.write_gif(f"./{name}.gif", fps=4, program='ffmpeg', loop=1, fuzz=1)
+
+outfile = f"./{name}.gif"
+
+if outfilename:
+  outname = outfilename
+  trim = outfilename.find(".gif")
+  if trim > -1:
+    outname = outfilename[:trim]
+  outfile = f"./{outname}.gif"
+vclip.write_gif(outfile, fps=2)
+#vclip.write_gif(f"./{name}.gif", fps=4, program='ffmpeg', loop=1, fuzz=1)
